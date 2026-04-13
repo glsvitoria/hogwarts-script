@@ -51,11 +51,10 @@ int line_count = 1;
 #define MAX_SYMBOLS 100
 char *symbol_table[MAX_SYMBOLS];
 int symbol_count = 0;
-int line_count = 1;
 
 int get_symbol_position(const char *id) {
     for (int i = 0; i < symbol_count; i++) {
-        if (strcmp(symbol_table[i], id) == 0) return i;
+        if (strcmp(symbol_table[i], id) == 0) return i + 1;
     }
     if (symbol_count < MAX_SYMBOLS) {
         symbol_table[symbol_count] = strdup(id);
@@ -73,7 +72,6 @@ INT_LITERAL      [0-9]+
 FLOAT_LITERAL    [0-9]+\.[0-9]+
 
 /* Comentários Mágicos */
-/* O Flex ignora o que está dentro das ações vazias {} */
 COMENTARIO_LINHA "// lumos"[^\n]*
 COMENTARIO_BLOCO "/* aparecium"([^*]|\*+[^*/])*(\*+\/)?
 
@@ -84,7 +82,7 @@ COMENTARIO_BLOCO "/* aparecium"([^*]|\*+[^*/])*(\*+\/)?
 {COMENTARIO_LINHA} { /* Ignora comentário de linha */ }
 {COMENTARIO_BLOCO} { /* Ignora comentário de bloco */ }
 
-    /* Palavras-Chave de Hogwarts */
+/* Palavras-Chave de Hogwarts */
 "gryffindor"       { return T_GRYFFINDOR; }
 "ravenclaw"        { return T_RAVENCLAW; }
 "hufflepuff"       { return T_HUFFLEPUFF; }
@@ -97,12 +95,12 @@ COMENTARIO_BLOCO "/* aparecium"([^*]|\*+[^*/])*(\*+\/)?
 "cast"             { return T_CAST; }
 "avada"            { return T_AVADA; }
 
-    /* Literais e IDs */
+/* Literais e IDs */
 {FLOAT_LITERAL}    { return T_FLOAT_LITERAL; }
 {INT_LITERAL}      { return T_INT_LITERAL; }
 {ID}  { yylval = get_symbol_position(yytext); return T_ID; }
 
-    /* Operadores de Comparação (Sempre antes do simples '=') */
+/* Operadores de Comparação (Sempre antes do simples '=') */
 "=="               { return T_OP_IGUAL; }
 "!="               { return T_OP_DIFERENTE; }
 ">="               { return T_OP_MAIOR_IGUAL; }
@@ -136,19 +134,18 @@ int main(int argc, char **argv) {
 
   int token;
   while ((token = yylex())) {
-      if (token == T_ID) {
-          printf("<id, %d> ", yylval);
-      } 
-      else if (token == T_INT_LITERAL || token == T_FLOAT_LITERAL) {
-          printf("<num, %s> ", yytext);
-      }
-      else {
-          printf("<%s> ", yytext);
-      }
+    if (token == T_ID) {
+      printf("<id, %d> ", yylval);
+    } 
+    else if (token == T_INT_LITERAL || token == T_FLOAT_LITERAL) {
+      printf("<num, %s> ", yytext);
+    }
+    else if (token != T_UNKNOWN) {
+      printf("<%s> ", yytext);
+    }
   }
   printf("\n");
 
-  // Limpeza da tabela
   for (int i = 0; i < symbol_count; i++) free(symbol_table[i]);
 
   return 0;
