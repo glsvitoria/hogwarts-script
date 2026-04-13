@@ -129,56 +129,27 @@ COMENTARIO_BLOCO "/* aparecium"([^*]|\*+[^*/])*(\*+\/)?
 %%
 
 int main(int argc, char **argv) {
-    if (argc > 1) {
-        FILE *file = fopen(argv[1], "r");
-        if (file) yyin = file;
-    }
+  if (argc > 1) {
+      FILE *file = fopen(argv[1], "r");
+      if (file) yyin = file;
+  }
 
-    int token_id;
-    while ((token_id = yylex())) {
-        printf("Token: %3d | ", token_id);
+  int token;
+  while ((token = yylex())) {
+      if (token == T_ID) {
+          printf("<id, %d> ", yylval);
+      } 
+      else if (token == T_INT_LITERAL || token == T_FLOAT_LITERAL) {
+          printf("<num, %s> ", yytext);
+      }
+      else {
+          printf("<%s> ", yytext);
+      }
+  }
+  printf("\n");
 
-        switch (token_id) {
-            case T_ID:
-                printf("(ID)             | Posição: %d, Lexema: %s\n", yylval, symbol_table[yylval]);
-                break;
-            case T_INTEGER:
-                printf("(Integer)        | Valor: %d\n", yylval);
-                break;
-            case T_FLOAT_LITERAL:
-                printf("(Float Literal)  | Lexema: %s\n", yytext);
-                break;
-            case T_STRING:
-                printf("(String)         | Lexema: %s\n", yytext);
-                break;
-            case T_CHAR_LITERAL:
-                printf("(Char Literal)   | Lexema: %s\n", yytext);
-                break;
-            case T_IF: case T_ELSE: case T_WHILE: case T_FOR:
-            case T_INT: case T_FLOAT: case T_CHAR: case T_VOID: case T_RETURN:
-                printf("(Keyword)        | Lexema: %s\n", yytext);
-                break;
-            case T_OP_SOMA: case T_OP_SUB: case T_OP_MULT: case T_OP_DIV:
-            case T_OP_ATRIB: case T_OP_IGUAL: case T_OP_DIFERENTE:
-            case T_OP_MENOR: case T_OP_MAIOR: case T_OP_MENOR_IGUAL: 
-            case T_OP_MAIOR_IGUAL: case T_OP_INC: case T_OP_DEC:
-                printf("(Operator)       | Lexema: %s\n", yytext);
-                break;
-            case T_PV: case T_VIRGULA:
-            case T_PAREN_ESQ: case T_PAREN_DIR:
-            case T_CHAVE_ESQ: case T_CHAVE_DIR:
-                printf("(Separator)      | Lexema: %s\n", yytext);
-                break;
-            default:
-                printf("(Erro/Outro)     | Lexema: %s\n", yytext);
-        }
-    }
+  // Limpeza da tabela
+  for (int i = 0; i < symbol_count; i++) free(symbol_table[i]);
 
-    printf("\n--- Tabela de Simbolos Final ---\n");
-    for (int i = 0; i < symbol_count; i++) {
-        printf("[%d] -> %s\n", i, symbol_table[i]);
-        free(symbol_table[i]);
-    }
-
-    return 0;
+  return 0;
 }
