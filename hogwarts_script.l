@@ -44,7 +44,25 @@ typedef enum {
   T_UNKNOWN
 } TokenType;
 
+int yylval;
+
 int line_count = 1;
+
+#define MAX_SYMBOLS 100
+char *symbol_table[MAX_SYMBOLS];
+int symbol_count = 0;
+int line_count = 1;
+
+int get_symbol_position(const char *id) {
+    for (int i = 0; i < symbol_count; i++) {
+        if (strcmp(symbol_table[i], id) == 0) return i;
+    }
+    if (symbol_count < MAX_SYMBOLS) {
+        symbol_table[symbol_count] = strdup(id);
+        return symbol_count++;
+    }
+    return -1;
+}
 %}
 
 %option noyywrap
@@ -82,7 +100,7 @@ COMENTARIO_BLOCO "/* aparecium"([^*]|\*+[^*/])*(\*+\/)?
     /* Literais e IDs */
 {FLOAT_LITERAL}    { return T_FLOAT_LITERAL; }
 {INT_LITERAL}      { return T_INT_LITERAL; }
-{ID}               { return T_ID; }
+{ID}  { yylval = get_symbol_position(yytext); return T_ID; }
 
     /* Operadores de Comparação (Sempre antes do simples '=') */
 "=="               { return T_OP_IGUAL; }
@@ -116,10 +134,51 @@ int main(int argc, char **argv) {
         if (file) yyin = file;
     }
 
-    printf("--- Iniciando Analisador HogwartsScript ---\n");
-    int token;
-    while ((token = yylex())) {
-        printf("Linha %d | Token: %d | Lexema: %s\n", line_count, token, yytext);
+    int token_id;
+    while ((token_id = yylex())) {
+        printf("Token: %3d | ", token_id);
+
+        switch (token_id) {
+            case T_ID:
+                printf("(ID)             | Posição: %d, Lexema: %s\n", yylval, symbol_table[yylval]);
+                break;
+            case T_INTEGER:
+                printf("(Integer)        | Valor: %d\n", yylval);
+                break;
+            case T_FLOAT_LITERAL:
+                printf("(Float Literal)  | Lexema: %s\n", yytext);
+                break;
+            case T_STRING:
+                printf("(String)         | Lexema: %s\n", yytext);
+                break;
+            case T_CHAR_LITERAL:
+                printf("(Char Literal)   | Lexema: %s\n", yytext);
+                break;
+            case T_IF: case T_ELSE: case T_WHILE: case T_FOR:
+            case T_INT: case T_FLOAT: case T_CHAR: case T_VOID: case T_RETURN:
+                printf("(Keyword)        | Lexema: %s\n", yytext);
+                break;
+            case T_OP_SOMA: case T_OP_SUB: case T_OP_MULT: case T_OP_DIV:
+            case T_OP_ATRIB: case T_OP_IGUAL: case T_OP_DIFERENTE:
+            case T_OP_MENOR: case T_OP_MAIOR: case T_OP_MENOR_IGUAL: 
+            case T_OP_MAIOR_IGUAL: case T_OP_INC: case T_OP_DEC:
+                printf("(Operator)       | Lexema: %s\n", yytext);
+                break;
+            case T_PV: case T_VIRGULA:
+            case T_PAREN_ESQ: case T_PAREN_DIR:
+            case T_CHAVE_ESQ: case T_CHAVE_DIR:
+                printf("(Separator)      | Lexema: %s\n", yytext);
+                break;
+            default:
+                printf("(Erro/Outro)     | Lexema: %s\n", yytext);
+        }
     }
+
+    printf("\n--- Tabela de Simbolos Final ---\n");
+    for (int i = 0; i < symbol_count; i++) {
+        printf("[%d] -> %s\n", i, symbol_table[i]);
+        free(symbol_table[i]);
+    }
+
     return 0;
 }
