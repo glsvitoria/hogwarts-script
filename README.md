@@ -8,6 +8,27 @@ HogwartsScript é uma linguagem imperativa, ASCII-compatível e fortemente temá
 
 Descreve todas as palavras-chave reservadas da linguagem, divididas por categorias: declaração de variáveis, estruturas de controle, tipos de função, definição e chamada de funções, fechamento de blocos e comentários temáticos.
 
+#### Autômato Finito Determinístico de Identificadores + Keywords
+
+- **Estados:**  
+  `Q = {q0, q1}`
+  
+- **Alfabeto:**  
+  `𝛴 = {A-Z, a-z, 0-9}`
+  
+- **Estado Inicial:**  
+  `q0`
+
+- **Estado Finais:**  
+  `F = {q1}`
+
+  - **Função de Transição:**  
+  `𝛿(q0, [A-Za-z] = q1`
+  `𝛿(q0, [0-9] = q1`
+  `𝛿(q0, x) = q1, para todo x 𝜖 {A-Z, a-z, 0-9}`
+
+Em resumo, podemos dizer que no autômato de transição (DFA) reconhece cadeias compostas por um único caractere que seja pertencente ao conjunto de letras definifo (maiúsculas e minúsculas) e dígitos, ou seja, ser ler mais de um caractere ou um caractere inválido não ocorrerá transição. Dessa forma, a função realiza uma transição partindo do estado inicial para o final ao ler um caractere válido.
+
 #### Diagrama de Identificadores + Keywords
 ```mermaid
 graph LR;
