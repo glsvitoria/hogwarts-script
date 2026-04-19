@@ -8,6 +8,20 @@ HogwartsScript é uma linguagem imperativa, ASCII-compatível e fortemente temá
 
 Descreve todas as palavras-chave reservadas da linguagem, divididas por categorias: declaração de variáveis, estruturas de controle, tipos de função, definição e chamada de funções, fechamento de blocos e comentários temáticos.
 
+#### Diagrama de Identificadores + Keywords
+```mermaid
+graph LR;
+    ID0(Start) -- "letra" --> ID1
+    ID1 -- "[A-Za-z0-9_]" --> ID1
+    ID1 --> ID2((ID reconhecido))
+    ID2 --> ID3{É palavra-chave?}
+    ID3 -- "sim" --> KW((Token específico))
+    ID3 -- "não" --> ID((Identificador))
+```
+Esse diagrama mostra que:
+
+- Primeiro o token é reconhecido como ID
+- Depois ocorre uma verificação para saber se é palavra-chave
 ### 2.1. Declaração de variáveis e vetores
 
 Define as palavras-chave usadas para criar variáveis inteiras, flutuantes e vetores numéricos.
@@ -136,6 +150,24 @@ Explica os comandos para iniciar funções, retornar valores e chamar funções 
 
 Apresenta os formatos de comentário de linha e bloco com temática mágica.
 
+#### Diagrama de Comentários
+
+``` mermaid
+graph LR;
+    CL0(Start) -- "// lumos" --> CL1
+    CL1 -- "qualquer exceto \\n" --> CL1
+    CL1 -- "\\n ou EOF" --> CL2((Comentário de linha))
+
+    CB0(Start) -- "/* aparecium" --> CB1
+    CB1 -- "qualquer caractere" --> CB1
+    CB1 -- "*/" --> CB2((Comentário de bloco))
+    CB1 -- "EOF" --> CB3((Bloco não fechado))
+```
+Esse comportamento reflete exatamente o analisador léxico:
+
+- Comentários de linha vão até o fim da linha
+- Comentários de bloco podem até não fechar 
+
 Comentário de linha
 
 ```
@@ -163,6 +195,22 @@ Regras formais para nomes de variáveis e funções.
 ```
 
 ### 3.2. Números
+
+#### Diagrama de Inteiros e Floats
+
+``` mermaid
+graph LR;
+    N0(Start) -- "dígito" --> N1(( INT ))
+    N1 -- "dígito" --> N1
+    N1 -- "." --> N2
+    N2 -- "dígito" --> N3(( FLOAT ))
+    N3 -- "dígito" --> N3
+```
+Explicação:
+
+- Um número começa como inteiro
+- Ao encontrar ., passa a ser float
+- Float só é válido se houver dígitos após o ponto
 
 Definição léxica de inteiros e floats.
 
@@ -194,6 +242,28 @@ Define operadores de comparação para condições.
 ==  !=  >  <  >=  <=
 ```
 
+#### Diagrama de Comparação
+``` mermaid
+graph LR;
+    R0(Start) -- "=" --> R1
+    R1 -- "=" --> R2(("=="))
+    R1 -- "outro" --> R3(("="))
+
+    R0 -- "!" --> R4
+    R4 -- "=" --> R5(("!="))
+
+    R0 -- '>' --> R6
+    R6 -- "=" --> R7(('>='))
+    R6 -- "outro" --> R8(('>'))
+
+    R0 -- "<" --> R9
+    R9 -- "=" --> R10(("<="))
+    R9 -- "outro" --> R11(("<"))
+```
+Explicação:
+
+- O analisador tenta formar operadores compostos primeiro (==, !=, etc.)
+- Caso contrário, aceita a versão simples (=, <, >)
 ### 3.5. Atribuição
 
 Define o token de atribuição.
@@ -209,7 +279,19 @@ Define parênteses, colchetes e vírgulas.
 ```
 (   )   [   ]   ,
 ```
-
+#### Diagrama de Símbolo Simples
+```mermaid
+graph LR;
+    S0(Start) -- '+' --> S1((PLUS))
+    S0 -- '-' --> S2((MINUS))
+    S0 -- '*' --> S3((MULT))
+    S0 -- "/" --> S4((DIV))
+    S0 -- "(" --> S5((P_ESQ))
+    S0 -- ")" --> S6((P_DIR))
+    S0 -- "[" --> S7((C_ESQ))
+    S0 -- "]" --> S8((C_DIR))
+    S0 -- "," --> S9((VIRG))
+```
 ### 3.7. Comentários
 
 Formato léxico dos comentários temáticos de linha e bloco.
@@ -225,6 +307,15 @@ Formato léxico dos comentários temáticos de linha e bloco.
 ```
 /\* aparecium(.|\n)*? \*/
 ```
+#### 3.8 Estado de erro lógico
+
+Caso nenhum dos padrões definidos anteriormente seja reconhecido, o analisador léxico entra em estado de erro.
+
+```mermaid
+graph LR;
+    E0(Start) -- "símbolo inválido" --> E1((Erro Léxico))
+```
+Esse estado representa qualquer caractere ou sequência que não pertence à linguagem HogwartsScript.
 
 ## 4. Declaração de Variávies
 
