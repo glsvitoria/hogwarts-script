@@ -22,9 +22,11 @@ Descreve todas as palavras-chave reservadas da linguagem, divididas por categori
 - **Estado Finais:**  
   `F = {q1}`
 
-  - **Função de Transição:**  
+- **Função de Transição:**  
   `𝛿(q0, [A-Za-z] = q1`
+  
   `𝛿(q0, [0-9] = q1`
+  
   `𝛿(q0, x) = q1, para todo x 𝜖 {A-Z, a-z, 0-9}`
 
 Em resumo, podemos dizer que no autômato de transição (DFA) reconhece cadeias compostas por um único caractere que seja pertencente ao conjunto de letras definifo (maiúsculas e minúsculas) e dígitos, ou seja, ser ler mais de um caractere ou um caractere inválido não ocorrerá transição. Dessa forma, a função realiza uma transição partindo do estado inicial para o final ao ler um caractere válido.
@@ -214,6 +216,31 @@ Regras formais para nomes de variáveis e funções.
 ```
 [A-Za-z][A-Za-z0-9_]*
 ```
+
+#### Autômato Finito Determinístico de Identificadores 
+
+- **Estados:**  
+  `Q = {q0, q1}`
+  
+- **Alfabeto:**  
+  `𝛴 = {A-Z, a-z, 0-9, _}`
+  
+- **Estado Inicial:**  
+  `q0`
+
+- **Estado Finais:**  
+  `F = {q1}`
+
+- **Função de Transição:**  
+  `𝛿(q0, [A-Za-z] = q1`
+
+  `𝛿(q1, [A-Za-z0-9_] = q1`
+  
+  `𝛿(q0, x) = q1, para todo x 𝜖 [A-Za-z]`
+  
+  `𝛿(q1, x) = q1, para todo x 𝜖 [A-Za-z0-9_]`
+
+Em resumo, podemos dizer que essa função de transição 𝛿 define como o autômato irá reconhecer identificadores iniciados por letra, seguidos, opcionalmente, por letras, digitos ou o caractere underscore (_). Realizando, portanto, transições que parte de um estado inicial para um estado final que possui um loop para possibilitar múltiplos caracteres.
 
 ### 3.2. Números
 
