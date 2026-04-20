@@ -416,6 +416,25 @@ Define o token de atribuição.
 ```
 =
 ```
+#### Autômato Finito Determinístico de Atribuição
+
+- **Estados:**  
+  `Q = {q0, q1}`
+  
+- **Alfabeto:**  
+  `𝛴 = {=}`
+  
+- **Estado Inicial:**  
+  `q0`
+
+- **Estado Finais:**  
+  `F = {q1}`
+
+- **Função de Transição:**  
+   `𝛿(q0, =) = q1`
+
+   Em resumo, podemos dizer que essa função de transição 𝛿 define como o autômato irá reconhecer o cracetere '=', caso encontre qualquer outro caractere ou símbolos adicionais inesperados não será possivél fazer a transição para o estado final. Essa função, portanto, garante transições que parte de um estado inicial para um estado final aceitando somente o caracetere de atribuição.
+
 
 ### 3.6. Pontuação
 
@@ -424,6 +443,28 @@ Define parênteses, colchetes e vírgulas.
 ```
 (   )   [   ]   ,
 ```
+
+#### Autômato Finito Determinístico de Pontuação
+
+- **Estados:**  
+  `Q = {q0, q1}`
+  
+- **Alfabeto:**  
+  `𝛴 = {'(',')' , '[',']' , ','}`
+  
+- **Estado Inicial:**  
+  `q0`
+
+- **Estado Finais:**  
+  `F = {q1}`
+
+- **Função de Transição:**
+  
+   `𝛿(q0, x) = q1, ∀ x 𝜖 {'(',')' , '[',']' , ','}`
+ 
+
+   Em resumo, podemos dizer que essa função de transição 𝛿 define como o autômato irá reconhecer o símbolos de pontuação aceitando apenas cadeias compostas por um único caractere pertencente ao conjunto {'(',')' , '[',']' , ','}. Essa função, portanto, realiza transição direta que parte de um estado inicial para um estado final.
+  
 #### Diagrama de Símbolo Simples
 ```mermaid
 graph LR;
