@@ -244,6 +244,54 @@ Em resumo, podemos dizer que essa função de transição 𝛿 define como o aut
 
 ### 3.2. Números
 
+#### Autômato Finito Determinístico de Inteiros
+
+- **Estados:**  
+  `Q = {q0, q1}`
+  
+- **Alfabeto:**  
+  `𝛴 = {0,...,9}`
+  
+- **Estado Inicial:**  
+  `q0`
+
+- **Estado Finais:**  
+  `F = {q1}`
+
+- **Função de Transição:**  
+   `𝛿(q0, x) = q1, ∀ x 𝜖 {0,...,9}`
+
+   `𝛿(q1, x) = q1, ∀ x 𝜖 {0,...,9}`
+
+Em resumo, podemos dizer que essa função de transição 𝛿 define como o autômato irá reconhecer inteiros, aceitando um ou mais dígitos Realizando, portanto, transições que parte de um estado inicial para um estado final que possui um loop para possibilitar mais dígitos.
+
+#### Autômato Finito Determinístico de Floats
+
+- **Estados:**  
+  `Q = {q0, q1, q2, q3}`
+  
+- **Alfabeto:**  
+  `𝛴 = {0,...,9, .}`
+  
+- **Estado Inicial:**  
+  `q0`
+
+- **Estado Finais:**  
+  `F = {q3}`
+
+- **Função de Transição:**  
+   `𝛿(q0, x) = q1, ∀ x 𝜖 {0,...,9}`
+
+   `𝛿(q1, x) = q1, ∀ x 𝜖 {0,...,9}`
+
+   `𝛿(q1, .) = q2`
+
+   `𝛿(q2, x) = q3, ∀ x 𝜖 {0,...,9}`
+
+   `𝛿(q3, x) = q3, ∀ x 𝜖 {0,...,9}`
+
+Em resumo, podemos dizer que essa função de transição 𝛿 define como o autômato irá reconhecer números reias com parte fracionária, exigindo uma sequência de dígitos, seguido por um ponto e pelo menos um dígito adicional. Garantindo, portanto, a definição de uma estrutira válida para os números reais.
+
 #### Diagrama de Inteiros e Floats
 
 ``` mermaid
