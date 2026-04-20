@@ -1,0 +1,11 @@
+// lumos spell, accio, cast, virgula/parenteses em parametro, slytherin (void)
+gryffindor idade = 5
+spell gryffindor proximo(gryffindor n)
+  accio n + 1
+avada
+gryffindor t = cast proximo(idade)
+
+spell slytherin vazio()
+  // lumos sem retorno
+avada
+cast vazio()
