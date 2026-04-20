@@ -330,6 +330,26 @@ Lista os operadores básicos suportados.
 +   -   *   /
 ```
 
+#### Autômato Finito Determinístico de Operadores Básicos
+
+- **Estados:**  
+  `Q = {q0, q1}`
+  
+- **Alfabeto:**  
+  `𝛴 = {+, -, *, /}`
+  
+- **Estado Inicial:**  
+  `q0`
+
+- **Estado Finais:**  
+  `F = {q1}`
+
+- **Função de Transição:**  
+   `𝛿(q0, x) = q1, ∀ x 𝜖 {+, -, *, /}`
+
+  Em resumo, podemos dizer que essa função de transição 𝛿 define como o autômato irá reconhecer operadores aritméticos simples, ou seja, vai aceitar cadeias compostas por somente um símbolo pertencente ao conjunto {+, -, *, /}. Realizando, portanto, uma transição que parte do estado inicial para o estado final ao ler um operador que seja válido.
+
+
 ### 3.4. Comparação
 
 Define operadores de comparação para condições.
@@ -337,6 +357,35 @@ Define operadores de comparação para condições.
 ```
 ==  !=  >  <  >=  <=
 ```
+
+#### Autômato Finito Determinístico de Operadores Básicos
+
+- **Estados:**  
+  `Q = {q0, q1, q2, q3, q4, q5}`
+  
+- **Alfabeto:**  
+  `𝛴 = {=, !, >, <}`
+  
+- **Estado Inicial:**  
+  `q0`
+
+- **Estado Finais:**  
+  `F = {q2, q4, q5}`
+
+- **Função de Transição:**  
+   `𝛿(q0, =) = q1`
+   `𝛿(q1, =) = q2`
+
+   `𝛿(q0, !) = q3`
+   `𝛿(q3, =) = q2`
+
+   `𝛿(q0, >) = q4`
+   `𝛿(q4, =) = q2`
+
+   `𝛿(q0, <) = q5`
+   `𝛿(q5, =) = q2`
+
+  Em resumo, podemos dizer que essa função de transição 𝛿 define como o autômato irá reconhecer operadores simples e compostos, fazendo uma diferenciação entre os símbolos de um e dois caracteres através de estados intermediários. Garantindo, portanto, uma transição que parte do estado inicial para o estado final aceitando somente sequências que sejam válidas.
 
 #### Diagrama de Comparação
 ``` mermaid
