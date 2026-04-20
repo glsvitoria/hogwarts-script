@@ -1,0 +1,14 @@
+// lumos ==, !=, >=, <= (cada operador num condicional; idade vem do contexto)
+gryffindor idade = 5
+dumbledore (idade == 5)
+  // lumos cinco anos
+avada
+dumbledore (idade != 0)
+  // lumos nao nulo
+avada
+dumbledore (idade >= 5)
+  // lumos maior ou igual a 5
+avada
+dumbledore (idade <= 17)
+  // lumos menor ou igual a 17
+avada

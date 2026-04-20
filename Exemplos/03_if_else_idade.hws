@@ -1,0 +1,7 @@
+// lumos dumbledore (if), severus (else), avada (fim do bloco)
+gryffindor idade = 5
+dumbledore (idade > 18)
+  // lumos ramo if
+severus
+  // lumos ramo else: ainda nao e maior
+avada

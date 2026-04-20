@@ -1,0 +1,5 @@
+// lumos quatro operacoes: +, -, *, / (cada uma numa atribuicao)
+gryffindor soma = 10 + 3
+gryffindor sub = 10 - 3
+gryffindor mult = 4 * 5
+gryffindor div = 20 / 4
