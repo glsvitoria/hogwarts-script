@@ -1,5 +1,28 @@
 # Especificação Oficial da Linguagem HogwartsScript
 
+## Como rodar os exemplos
+
+Os exemplos podem ser executados usando os arquivos de exemplo da pasta `Exemplos/`.
+
+1. Compile o analisador léxico:
+
+```bash
+flex hogwarts_script.l
+gcc lex.yy.c -o hogwarts_script -lfl
+```
+
+2. Execute um teste individual:
+
+```bash
+./hogwarts_script Exemplos/01_operacoes_aritmeticas.hws
+```
+
+3. Execute todos os exemplos:
+
+```bash
+for f in Exemplos/*.hws; do ./hogwarts_script "$f"; done
+```
+
 ## 1. Introdução
 
 HogwartsScript é uma linguagem imperativa, ASCII-compatível e fortemente temática do universo Harry Potter, com tipagem estática, suporte a variáveis numéricas, vetores, funções, estruturas condicionais e laços de repetição.
