@@ -11,11 +11,17 @@ Este trabalho implementa o analisador sintático da linguagem **HogwartsScript**
 
 ## 2. Mudanças em relação ao Trabalho 1
 
-No Trabalho 1, o lexer (`hogwarts_script.l`) reconhecia tokens e os imprimia diretamente. No Trabalho 2, o mesmo lexer foi adaptado para se integrar ao Bison:
+No Trabalho 1, o lexer (`hogwarts_script.l`) reconhecia tokens e os imprimia diretamente. No Trabalho 2, foi criado `Parte2/lexer.l` como versão adaptada para integração com o Bison. As mudanças foram:
 
-- O `main()` foi movido para o `parser.y`, que agora chama `yyparse()`
-- Os tokens passam a ser definidos pelo Bison e compartilhados via `parser.tab.h`
-- O `yylval` agora usa a union do Bison para carregar valores semânticos (`str_val` para identificadores, `int_val` e `float_val` para literais)
+| O que mudou no lexer | Trabalho 1 (`hogwarts_script.l`) | Trabalho 2 (`Parte2/lexer.l`) |
+|---|---|---|
+| Definição dos tokens | `typedef enum TokenType { ... }` manual | Removido — vem de `#include "parser.tab.h"` |
+| Valor semântico `yylval` | `int yylval` (índice na tabela de símbolos) | `YYSTYPE` (union do Bison) |
+| Identificadores | `yylval = get_symbol_position(yytext)` | `yylval.str_val = strdup(yytext)` |
+| Literais inteiros | sem atribuição de valor | `yylval.int_val = atoi(yytext)` |
+| Literais float | sem atribuição de valor | `yylval.float_val = atof(yytext)` |
+| Tabela de símbolos | presente (`symbol_table[]`) | removida (não necessária) |
+| `main()` | presente no lexer | removido — fica no `parser.y` |
 
 Além disso, ajustamos a sintaxe da linguagem para ficar mais clara e consistente com os exemplos:
 
@@ -101,8 +107,6 @@ spell gryffindor soma(gryffindor a, gryffindor b)
   accio a + b
 avada
 ```
-
-Escolhemos `avada` como terminador de bloco (em vez de `}`) para manter a identidade temática da linguagem e não precisar de chaves.
 
 ---
 
@@ -231,22 +235,52 @@ programa
 
 ## 5. Como compilar e testar
 
+Todos os arquivos da Parte 2 ficam em `Parte2/`. Entre na pasta antes de compilar:
+
 ```bash
-# Gerar parser e lexer
-bison -d Parte2/parser.y
-flex hogwarts_script.l
+cd Parte2
+```
 
-# Compilar
-gcc lex.yy.c parser.tab.c -o parser -lfl
+**Compilar com Make(Implementar) (recomendado):**
 
-# Testar com um exemplo
-./parser Exemplos/03_if_else_idade.hws
+```bash
+make
+```
+
+Isso executa automaticamente, na ordem certa:
+1. `bison -d parser.y` → gera `parser.tab.c` e `parser.tab.h`
+2. `flex lexer.l` → gera `lex.yy.c`
+3. `gcc parser.tab.c lex.yy.c -o parser -lfl` → gera o executável `parser`
+
+**Testar um arquivo específico:**
+
+```bash
+./parser ../Exemplos/03_if_else_idade.hws
+```
+
+**Testar todos os exemplos de uma vez:**
+
+```bash
+make test
+```
+
+**Limpar arquivos gerados:**
+
+```bash
+make clean
+```
+
+**Compilar manualmente (sem Make):**
+
+```bash
+bison -d parser.y
+flex lexer.l
+gcc parser.tab.c lex.yy.c -o parser -lfl
 ```
 
 ---
 
 ## 6. Referências
 
-- Aho, Lam, Sethi, Ullman. *Compilers: Principles, Techniques, and Tools*. Addison-Wesley, 2006.
 - GNU Bison Manual: https://www.gnu.org/software/bison/manual/
 - Flex Manual: https://westes.github.io/flex/manual/
